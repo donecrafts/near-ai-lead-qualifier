@@ -10,7 +10,7 @@ Teams collect leads from forms, spreadsheets, and conversations, then spend time
 
 Every qualification request is sent server-side to **NEAR AI Cloud** using its OpenAI-compatible API (`https://cloud-api.near.ai/v1`). The app uses a NEAR AI Cloud model (default: `zai-org/GLM-5.1-FP8`) for all scoring. Lead details are not sent to OpenAI or another AI provider. The API key stays on the server and must never be exposed in client code or committed.
 
-The first version keeps scored leads in process memory, not on disk or in a hosted database. That makes it easy to demo; the list clears when the server restarts and is not shared across deployed instances.
+The first version keeps scored leads only in the current browser tab's memory, not on disk or in a hosted database. Lead records are returned only to the submitting browser; there is no shared server-side lead list. The pipeline clears when the page is reloaded.
 
 ## Run locally
 

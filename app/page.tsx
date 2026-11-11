@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { ArrowDownLeft, ArrowUpRight, Bot, Check, Clock3, Copy, LockKeyhole, Plus, Send, ShieldCheck, Sparkles, Users } from 'lucide-react'
 
 type Lead = {
@@ -22,13 +22,6 @@ export default function Home() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [copied, setCopied] = useState(false)
-
-  useEffect(() => {
-    fetch('/api/leads').then((response) => response.json()).then((data) => {
-      setLeads(data.leads ?? [])
-      if (data.leads?.[0]) setSelected(data.leads[0])
-    }).catch(() => {})
-  }, [])
 
   function update(field: keyof typeof emptyForm, value: string) {
     setForm((current) => ({ ...current, [field]: value }))

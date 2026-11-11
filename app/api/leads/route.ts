@@ -17,17 +17,6 @@ type LeadResult = {
   createdAt: string
 }
 
-declare global {
-  // eslint-disable-next-line no-var
-  var qualifiedLeads: LeadResult[] | undefined
-}
-
-const leads = globalThis.qualifiedLeads ?? (globalThis.qualifiedLeads = [])
-
-export async function GET() {
-  return NextResponse.json({ leads })
-}
-
 export async function POST(request: Request) {
   if (!process.env.NEAR_AI_API_KEY) {
     return NextResponse.json(
@@ -86,8 +75,6 @@ export async function POST(request: Request) {
       firstMessage: parsed.firstMessage.slice(0, 2000),
       createdAt: new Date().toISOString(),
     }
-    leads.unshift(lead)
-    if (leads.length > 100) leads.length = 100
     return NextResponse.json({ lead }, { status: 201 })
   } catch (error) {
     console.error('NEAR AI Cloud qualification failed:', error)
