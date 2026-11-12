@@ -1,40 +1,41 @@
-# Signal — NEAR HACKATHON
+# NearSignal for Real Estate — NEAR HACKATHON
 
-A focused lead qualification agent built for **NEAR HACKATHON**. Signal turns basic lead context into a hot, warm, or cold score, a concise explanation, and a suggested first message.
+**Know which buyers and renters to call first.** NearSignal helps real estate agents prioritize buyer, renter, and seller inquiries with a hot, warm, or cold score, evidence-based reasons, and a friendly first message.
 
 ## The problem
 
-Teams collect leads from forms, spreadsheets, and conversations, then spend time figuring out who to contact first and what to say. Signal gives each lead a quick, actionable first read so a small team can prioritize follow-up.
+Agents receive leads through forms, spreadsheets, email, WhatsApp, and DMs. It takes time to work out who is ready to move and what a useful first response should be. NearSignal turns that scattered context into a practical next step.
 
 ## How NEAR AI Cloud is used
 
-Every qualification request is sent server-side to **NEAR AI Cloud** using its OpenAI-compatible API (`https://cloud-api.near.ai/v1`). The app uses a NEAR AI Cloud model (default: `zai-org/GLM-5.1-FP8`) for all scoring. Lead details are not sent to OpenAI or another AI provider. The API key stays on the server and must never be exposed in client code or committed.
+The app sends qualification and paste-extraction requests from server routes to the OpenAI-compatible NEAR AI Cloud API at `https://cloud-api.near.ai/v1`. NEAR AI Cloud is the only model provider used for scoring and extraction. The default model is `zai-org/GLM-5.1-FP8`; `NEAR_AI_MODEL` can override it.
 
-The first version keeps scored leads only in the current browser tab's memory, not on disk or in a hosted database. Lead records are returned only to the submitting browser; there is no shared server-side lead list. The pipeline clears when the page is reloaded.
+`NEAR_AI_API_KEY` is read only by server-side routes. It is never included in client code. Pasted text and lead fields are processed in memory for the request only: there is no database, server-side lead list, or disk persistence. The scored pipeline exists only in the current browser tab and clears on refresh. `GET /api/leads` deliberately returns 405.
 
 ## Run locally
 
 1. Install dependencies with `pnpm install`.
-2. Create `.env.local` from `.env.example` and replace the placeholder with your NEAR AI Cloud key. Keep `.env.local` private; it is git-ignored.
-3. Start the app with `pnpm dev` and open `http://localhost:3000`.
+2. Copy `.env.example` to `.env.local` and set `NEAR_AI_API_KEY` to your NEAR AI Cloud key. Keep `.env.local` private; it is git-ignored.
+3. Start with `pnpm dev` and open `http://localhost:3000`.
 
-Get a key and check available models in the [NEAR AI Cloud quickstart](https://docs.near.ai/cloud/quickstart). Optional `NEAR_AI_MODEL` overrides the default model.
+Get a key and review available models in the [NEAR AI Cloud quickstart](https://docs.near.ai/cloud/quickstart).
 
 ## Judge demo: do X, see Y
 
-1. Click **TRY SAMPLE** to load a realistic lead from Northstar Health.
-2. Click **QUALIFY LEAD**. The app sends that lead to NEAR AI Cloud.
-3. See the hot/warm/cold temperature, the AI's short rationale, and a tailored first message in the readout.
-4. Click **COPY MESSAGE** to copy the draft, or select a scored lead from the pipeline to revisit its result.
+1. Click **Hot buyer**, **Warm renter**, or **Cold browser** to load a realistic example, or paste a lead message and choose **Fill from paste**.
+2. Review and edit the extracted or sample fields; no scoring happens until you submit.
+3. Click **Score this lead**. See the hot/warm/cold result, the short explanation and reasons, and a tailored first message.
+4. Choose **Copy message** to copy the draft. The scored lead appears in the in-tab pipeline table.
+5. To import a sheet, paste a Google Forms CSV with a header row or a single Sheets row into the same paste box, then choose **Paste a row from Sheets / CSV**. The first data row is filled for review.
 
-The first scoring request requires a valid `NEAR_AI_API_KEY` in `.env.local`. If the key is missing, the app explains how to configure it; it never silently substitutes a mock score.
+Scoring and extraction can take up to a minute. A valid `NEAR_AI_API_KEY` is required; there is no mock scoring fallback.
 
-## Tracks
+## NEAR HACKATHON tracks
 
-- **Autonomous Business** — prioritize and move sales conversations forward.
-- **Agent Economy** — an AI agent that turns lead context into a next action.
-- **Privacy & Private AI** — sensitive lead data is scored through NEAR AI Cloud private inference.
+- **Autonomous Business** — prioritize real estate follow-up.
+- **Agent Economy** — an AI agent extracts, qualifies, and drafts the next step.
+- **Privacy & Private AI** — lead information is sent only to NEAR AI Cloud for inference; the app does not retain it on its server.
 
-## Tech
+## Stack
 
-Next.js App Router, TypeScript, and the OpenAI-compatible Node SDK pointed exclusively at NEAR AI Cloud. The API key is only accessed in the server route. Input fields and server-side validation are bounded; lead notes are treated as untrusted data in the model instructions.
+Next.js App Router, TypeScript, and the OpenAI-compatible Node SDK pointed exclusively at NEAR AI Cloud. Input is validated on the server, prompt-injection content is treated as untrusted data, and the API key remains server-only.

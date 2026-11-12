@@ -3,8 +3,8 @@ import type { Metadata, Viewport } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'Signal — NEAR AI Lead Qualification',
-  description: 'Privately qualify leads with NEAR AI Cloud. Get a hot, warm, or cold score and a suggested first message.',
+  title: 'NearSignal for Real Estate',
+  description: 'Know which buyers and renters to call first. Private real estate lead qualification powered by NEAR AI Cloud.',
   generator: 'NEAR HACKATHON',
   icons: {
     icon: [{ url: '/icon.svg', type: 'image/svg+xml' }],
@@ -13,11 +13,8 @@ export const metadata: Metadata = {
 }
 
 export const viewport: Viewport = {
-  colorScheme: 'light dark',
-  themeColor: [
-    { media: '(prefers-color-scheme: light)', color: 'white' },
-    { media: '(prefers-color-scheme: dark)', color: 'black' },
-  ],
+  colorScheme: 'light',
+  themeColor: '#f7f8f5',
 }
 
 export default function RootLayout({
@@ -27,7 +24,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="antialiased">
+      <body>
         {children}
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>
